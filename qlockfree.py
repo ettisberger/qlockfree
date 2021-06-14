@@ -116,6 +116,9 @@ def changeNeeded():
         return True
     return False
 
+def isNightmode(hour): 
+    return hour >= config.NIGHTMODE_END and hour < config.NIGHTMODE_END
+
 def show(timeArray, color):
     for i in range(num_pixels):
         if i in timeArray:
@@ -134,7 +137,7 @@ num_pixels = 114
 order = neopixel.GRB
 
 pixels = neopixel.NeoPixel(
-    pixel_pin, num_pixels, brightness=0.8, auto_write=False, pixel_order=order
+    pixel_pin, num_pixels, brightness=config.DEFAULT_BRIGHTNESS, auto_write=False, pixel_order=order
 )
 
 print("start")
@@ -150,8 +153,15 @@ while True:
 
     if changeNeeded():
         # resetLED()
+        if isNightmode(hour):
+            pixels.brightness = config.NIGHTMODE_BRIGHTNESS
+        else:
+            pixels.brightness = config.DEFAULT_BRIGHTNESS
+
         color = getColor()
         timeArray = getTime(hour, minute)
         print("time: ", timeArray)
         print("color: ", color)
+        print("brightness: ", pixels.brightness)
+
         show(timeArray, color)

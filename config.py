@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+# nightmode
+NIGHTMODE_START = 23
+NIGHTMODE_END = 6
+
+# brightness
+DEFAULT_BRIGHTNESS = 0.6
+NIGHTMODE_BRIGHTNESS = 0.1
+
 # colors
 COLOR_NONE = (0,0,0)
 COLOR_RED = (255,0,0)

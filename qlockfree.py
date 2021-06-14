@@ -117,7 +117,7 @@ def changeNeeded():
     return False
 
 def isNightmode(hour): 
-    return hour >= config.NIGHTMODE_START and hour < config.NIGHTMODE_END
+    return hour >= config.NIGHTMODE_START or hour < config.NIGHTMODE_END
 
 def show(timeArray, color):
     for i in range(num_pixels):

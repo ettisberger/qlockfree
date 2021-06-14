@@ -62,7 +62,8 @@ def getMinute(minute):
     return []
 
 def getHour(hour, minute):
-    if hour > 12:
+    print(hour)
+    if hour >= 12:
         hour = hour - 12
     if minute >= 25:
         hour = hour + 1 

@@ -141,7 +141,7 @@ num_pixels = 114
 order = neopixel.GRB
 
 pixels = neopixel.NeoPixel(
-    pixel_pin, num_pixels, brightness=config.get('default', 'brightness'), auto_write=False, pixel_order=order
+    pixel_pin, num_pixels, brightness=config.getfloat('default', 'brightness'), auto_write=False, pixel_order=order
 )
 
 print("start")
@@ -158,9 +158,9 @@ while True:
     if changeNeeded():
         # resetLED()
         if isNightmode(hour):
-            pixels.brightness = config.get('nightmode', 'brightness')
+            pixels.brightness = config.getfloat('nightmode', 'brightness')
         else:
-            pixels.brightness = config.get('brightness')
+            pixels.brightness = config.getfloat('brightness')
 
         color = getColor()
         timeArray = getTime(hour, minute)

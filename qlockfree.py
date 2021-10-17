@@ -141,7 +141,7 @@ num_pixels = 114
 order = neopixel.GRB
 
 pixels = neopixel.NeoPixel(
-    pixel_pin, num_pixels, brightness=config.get('brightness'), auto_write=False, pixel_order=order
+    pixel_pin, num_pixels, brightness=config.getfloat('brightness'), auto_write=False, pixel_order=order
 )
 
 print("start")

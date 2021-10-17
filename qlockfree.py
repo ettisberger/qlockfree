@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import time 
+import time
 import datetime
 import board
 import neopixel
@@ -9,7 +9,7 @@ import configparser
 
 parser = configparser.ConfigParser()
 parser.read('config.ini')
-config = parser['AARGAU']
+config = parser['aargau']
 
 def resetLED():
     for i in range(num_pixels):
@@ -70,7 +70,7 @@ def getHour(hour, minute):
     if hour >= 12:
         hour = hour - 12
     if minute >= 25:
-        hour = hour + 1 
+        hour = hour + 1
     if hour == 0:
         return config.get('zwelfi')
     elif hour == 1:
@@ -113,14 +113,14 @@ def getColor():
 
 def changeNeeded():
     global lastMinute
-    global color 
+    global color
     if minute != lastMinute:
         lastMinute = minute
         print("time change detected")
         return True
     return False
 
-def isNightmode(hour): 
+def isNightmode(hour):
     return hour >= config.get('nightmode', 'start') or hour < config.get('nightmode', 'end')
 
 def show(timeArray, color):

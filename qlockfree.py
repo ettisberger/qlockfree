@@ -13,7 +13,7 @@ config = parser['aargau']
 
 def resetLED():
     for i in range(num_pixels):
-        pixels[i] = config.get('colorBlank')
+        pixels[i] = eval(config.get('colorBlank'))
         pixels.show()
 
 def getTime(hour, minute):
@@ -121,19 +121,14 @@ def changeNeeded():
     return False
 
 def isNightmode(hour):
-    return hour >= config.get('nightmode_start') or hour < config.get('nightmode_end')
+    return hour >= config.getint('nightmode_start') or hour < config.getint('nightmode_end')
 
 def show(timeArray, color):
     for i in range(num_pixels):
         if i in timeArray:
-            pixels[i] = color
+            pixels[i] = eval(color)
         else:
-            pixels[i] = config.get('colorBlank')
-    pixels.show()
-
-def test():
-    for i in range(num_pixels):
-        pixels[i] = config.get('color')
+            pixels[i] = eval(config.get('colorBlank'))
     pixels.show()
 
 pixel_pin = board.D18

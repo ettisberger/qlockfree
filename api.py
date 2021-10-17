@@ -7,7 +7,7 @@ import configparser
 
 parser = configparser.ConfigParser()
 parser.read('config.ini')
-config = parser['AARGAU']
+config = parser['aargau']
 
 color = config.get('default', 'color')
 

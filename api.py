@@ -3,13 +3,9 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-import configparser
+from config import config_ag as config
 
-parser = configparser.ConfigParser()
-parser.read('config.ini')
-config = parser['aargau']
-
-color = config.get('default', 'color')
+color = config.DEFAULT_COLOR
 
 app = Flask(__name__)
 
@@ -26,9 +22,9 @@ def getColor():
 @app.route('/color/change/default', methods=['GET','PUT'])
 def resetDefaultColor():
     global color
-    print("API: Change color to default ", config.get('default', 'color'))
-    color = config.get('default', 'color')
-    return jsonify(config.get('default', 'color'))
+    print("API: Change color to default ", config.DEFAULT_COLOR)
+    color = config.DEFAULT_COLOR
+    return jsonify(config.DEFAULT_COLOR)
 
 @app.route('/color/change', methods=['GET','PUT'])
 def changeColor():
@@ -38,15 +34,15 @@ def changeColor():
         print("API: Change color from", color, " to ", request.args['color'])
         color = [int(x.strip()) for x in request.args['color'].split(',')]
     else:
-        if color == config.get('default', 'colorWhite'):
-            print("API: Change color from", color, " to ", config.get('default', 'colorRed'))
-            color = config.get('default', 'colorRed')
-        elif color == config.get('default', 'colorRed'):
-            print("API: Change color from", color, " to ", config.get('default', 'colorWhite'))
-            color = config.get('default', 'colorWhite')
+        if color == config.COLOR_WHITE:
+            print("API: Change color from", color, " to ", config.COLOR_RED)
+            color = config.COLOR_RED
+        elif color == config.COLOR_RED:
+            print("API: Change color from", color, " to ", config.COLOR_WHITE)
+            color = config.COLOR_WHITE
 
     print("API: Change color")
     return jsonify(color)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=80)
+    app.run(debug=True,host="0.0.0.0",port=80)

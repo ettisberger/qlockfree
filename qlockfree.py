@@ -1,25 +1,20 @@
 #!/usr/bin/env python
 
-import time
 import datetime
 import board
 import neopixel
+from config import config_ag as config
 import requests
-import configparser
-
-parser = configparser.ConfigParser()
-parser.read('config.ini')
-config = parser['aargau']
 
 def resetLED():
     for i in range(num_pixels):
-        pixels[i] = eval(config.get('colorBlank'))
+        pixels[i] = config.COLOR_NONE
         pixels.show()
 
 def getTime(hour, minute):
     time = []
 
-    time = time + config.get('es') + config.get('isch') + getMinute(minute) + getSingleMinute(minute) + getHour(hour, minute)
+    time = time + config.ES + config.ISCH + getMinute(minute) + getSingleMinute(minute) + getHour(hour, minute)
 
     return time
 
@@ -29,40 +24,40 @@ def getSingleMinute(minute):
     if singleMinute == 0:
         return []
     elif singleMinute == 1:
-        return config.get('plus_one')
+        return config.PLUS_ONE
     elif singleMinute == 2:
-        return config.get('plus_two') + config.get('plus_one')
+        return config.PLUS_TWO + config.PLUS_ONE
     elif singleMinute == 3:
-        return config.get('plus_three') + config.get('plus_two') + config.get('plus_one')
+        return config.PLUS_THREE + config.PLUS_TWO + config.PLUS_ONE
     elif singleMinute == 4:
-        return config.get('plus_four') + config.get('plus_three') + config.get('plus_two') + config.get('plus_one')
+        return config.PLUS_FOUR + config.PLUS_THREE + config.PLUS_TWO + config.PLUS_ONE
     return []
 
 def getMinute(minute):
     if minute == 0:
         return []
     elif 5 <= minute < 10:
-        return config.get('fimf') + config.get('ab')
+        return config.FIMF + config.AB
     elif 10 <= minute < 15:
-        return config.get('zae') + config.get('ab')
+        return config.ZAE + config.AB
     elif 15 <= minute < 20:
-        return config.get('viertel') + config.get('ab')
+        return config.VIERTEL + config.AB
     elif 20 <= minute < 25:
-        return config.get('zwanzig') + config.get('ab')
+        return config.ZWANZIG + config.AB
     elif 25 <= minute < 30:
-        return config.get('fimf') + config.get('vor') + config.get('halbi')
+        return config.FIMF + config.VOR + config.HALBI
     elif 30 <= minute < 35:
-        return config.get('halbi')
+        return config.HALBI
     elif 35 <= minute < 40:
-        return config.get('fimf') + config.get('ab') + config.get('halbi')
+        return config.FIMF + config.AB + config.HALBI
     elif 40 <= minute < 45:
-        return config.get('zwanzig') + config.get('vor')
+        return config.ZWANZIG + config.VOR
     elif 45 <= minute < 50:
-        return config.get('viertel') + config.get('vor')
+        return config.VIERTEL + config.VOR
     elif 50 <= minute < 55:
-        return config.get('zae') + config.get('vor')
+        return config.ZAE + config.VOR
     elif minute >= 55:
-        return config.get('fimf') + config.get('vor')
+        return config.FIMF + config.VOR
     return []
 
 def getHour(hour, minute):
@@ -72,31 +67,31 @@ def getHour(hour, minute):
     if minute >= 25:
         hour = hour + 1
     if hour == 0:
-        return config.get('zwelfi')
+        return config.ZWELFI
     elif hour == 1:
-        return config.get('ains')
+        return config.AINS
     elif hour == 2:
-        return config.get('zwai')
+        return config.ZWAI
     elif hour == 3:
-        return config.get('drey')
+        return config.DREY
     elif hour == 4:
-        return config.get('vieri')
+        return config.VIERI
     elif hour == 5:
-        return config.get('fimfi')
+        return config.FIMFI
     elif hour == 6:
-        return config.get('saggsi')
+        return config.SAGGSI
     elif hour == 7:
-        return config.get('siibeni')
+        return config.SIIBENI
     elif hour == 8:
-        return config.get('achti')
+        return config.ACHTI
     elif hour == 9:
-        return config.get('nyyni')
+        return config.NYYNI
     elif hour == 10:
-        return config.get('zaani')
+        return config.ZAANI
     elif hour == 11:
-        return config.get('elfi')
+        return config.ELFI
     elif hour == 12:
-        return config.get('zwelfi')
+        return config.ZWELFI
     return []
 
 def getColor():
@@ -104,12 +99,12 @@ def getColor():
         response = requests.get("http://raspberrypi/color")
         if (response.status_code != 200):
             print("Error!", response.status_code)
-            return config.get('color')
+            return config.DEFAULT_COLOR
         response = response.json()
         return (response[0], response[1], response[2])
     except requests.ConnectionError as error:
         print(error)
-        return config.get('color')
+        return config.DEFAULT_COLOR
 
 def changeNeeded():
     global lastMinute
@@ -121,14 +116,19 @@ def changeNeeded():
     return False
 
 def isNightmode(hour):
-    return hour >= config.getint('nightmode_start') or hour < config.getint('nightmode_end')
+    return hour >= config.NIGHTMODE_START or hour < config.NIGHTMODE_END
 
 def show(timeArray, color):
     for i in range(num_pixels):
         if i in timeArray:
-            pixels[i] = eval(color)
+            pixels[i] = color
         else:
-            pixels[i] = eval(config.get('colorBlank'))
+            pixels[i] = config.COLOR_NONE
+    pixels.show()
+
+def test():
+    for i in range(num_pixels):
+        pixels[i] = config.DEFAULT_COLOR
     pixels.show()
 
 pixel_pin = board.D18
@@ -136,14 +136,14 @@ num_pixels = 114
 order = neopixel.GRB
 
 pixels = neopixel.NeoPixel(
-    pixel_pin, num_pixels, brightness=config.getfloat('brightness'), auto_write=False, pixel_order=order
+    pixel_pin, num_pixels, brightness=config.DEFAULT_BRIGHTNESS, auto_write=False, pixel_order=order
 )
 
 print("start")
 resetLED()
 
 lastMinute = None
-color = config.get('color')
+color = config.DEFAULT_COLOR
 
 while True:
     now = datetime.datetime.now()
@@ -153,9 +153,9 @@ while True:
     if changeNeeded():
         # resetLED()
         if isNightmode(hour):
-            pixels.brightness = config.getfloat('nightmode_brightness')
+            pixels.brightness = config.NIGHTMODE_BRIGHTNESS
         else:
-            pixels.brightness = config.getfloat('brightness')
+            pixels.brightness = config.DEFAULT_BRIGHTNESS
 
         color = getColor()
         timeArray = getTime(hour, minute)

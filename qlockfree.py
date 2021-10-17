@@ -13,7 +13,7 @@ config = parser['aargau']
 
 def resetLED():
     for i in range(num_pixels):
-        pixels[i] = config.get('default', 'colorBlank')
+        pixels[i] = config.get('colorBlank')
         pixels.show()
 
 def getTime(hour, minute):
@@ -104,12 +104,12 @@ def getColor():
         response = requests.get("http://raspberrypi/color")
         if (response.status_code != 200):
             print("Error!", response.status_code)
-            return config.get('default', 'color')
+            return config.get('color')
         response = response.json()
         return (response[0], response[1], response[2])
     except requests.ConnectionError as error:
         print(error)
-        return config.get('default', 'color')
+        return config.get('color')
 
 def changeNeeded():
     global lastMinute
@@ -121,19 +121,19 @@ def changeNeeded():
     return False
 
 def isNightmode(hour):
-    return hour >= config.get('nightmode', 'start') or hour < config.get('nightmode', 'end')
+    return hour >= config.get('nightmode_start') or hour < config.get('nightmode_end')
 
 def show(timeArray, color):
     for i in range(num_pixels):
         if i in timeArray:
             pixels[i] = color
         else:
-            pixels[i] = config.get('default', 'colorBlank')
+            pixels[i] = config.get('colorBlank')
     pixels.show()
 
 def test():
     for i in range(num_pixels):
-        pixels[i] = config.get('default', 'color')
+        pixels[i] = config.get('color')
     pixels.show()
 
 pixel_pin = board.D18
@@ -141,14 +141,14 @@ num_pixels = 114
 order = neopixel.GRB
 
 pixels = neopixel.NeoPixel(
-    pixel_pin, num_pixels, brightness=config.getfloat('default', 'brightness'), auto_write=False, pixel_order=order
+    pixel_pin, num_pixels, brightness=config.get('brightness'), auto_write=False, pixel_order=order
 )
 
 print("start")
 resetLED()
 
 lastMinute = None
-color = config.get('default', 'color')
+color = config.get('color')
 
 while True:
     now = datetime.datetime.now()
@@ -158,9 +158,9 @@ while True:
     if changeNeeded():
         # resetLED()
         if isNightmode(hour):
-            pixels.brightness = config.getfloat('nightmode', 'brightness')
+            pixels.brightness = config.get('nightmode_brightness')
         else:
-            pixels.brightness = config.getfloat('brightness')
+            pixels.brightness = config.get('brightness')
 
         color = getColor()
         timeArray = getTime(hour, minute)

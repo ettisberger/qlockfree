@@ -4,7 +4,7 @@ import time
 import datetime
 import board
 import neopixel
-import config
+from config import config_ag as config
 
 def resetLED():
     for i in range(num_pixels):

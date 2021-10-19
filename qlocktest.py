@@ -25,12 +25,15 @@ def test():
     testArrays.append(config.ES + config.ISCH)
     testArrays.append(config.ES + config.ISCH + config.FIMF)
     testArrays.append(config.ES + config.ISCH + config.ZAE)
+    testArrays.append(config.ES + config.ISCH + config.VIERTEL)
     testArrays.append(config.ES + config.ISCH + config.ZWANZIG)
     testArrays.append(config.ES + config.ISCH + config.FIMF + config.AB)
     testArrays.append(config.ES + config.ISCH + config.ZAE + config.AB)
+    testArrays.append(config.ES + config.ISCH + config.VIERTEL + config.AB)
     testArrays.append(config.ES + config.ISCH + config.ZWANZIG + config.AB)
     testArrays.append(config.ES + config.ISCH + config.FIMF + config.VOR)
     testArrays.append(config.ES + config.ISCH + config.ZAE + config.VOR)
+    testArrays.append(config.ES + config.ISCH + config.VIERTEL + config.VOR)
     testArrays.append(config.ES + config.ISCH + config.ZWANZIG + config.VOR)
     testArrays.append(config.ES + config.ISCH + config.FIMF + config.AB + config.HALBI)
     testArrays.append(config.ES + config.ISCH + config.FIMF + config.VOR + config.HALBI)
@@ -67,5 +70,5 @@ while True:
 
     for i in tests:
         print("testing...")
-        show(i, config.DEFAULT_COLOR)
+        show(i,color )
         time.sleep(1)

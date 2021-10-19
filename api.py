@@ -25,12 +25,15 @@ def getBrightness():
     print("API: Get brightness ", brightness)
     return jsonify(brightness)
 
-@app.route('/color/change/default', methods=['GET','PUT'])
-def resetDefaultColor():
+@app.route('/default', methods=['GET','PUT'])
+def resetDefault():
     global color
+    global brightness
     print("API: Change color to default ", config.DEFAULT_COLOR)
+    print("API: Change brightness to default ", config.DEFAULT_BRIGHTNESS)
     color = config.DEFAULT_COLOR
-    return jsonify(config.DEFAULT_COLOR)
+    brightness = config.DEFAULT_BRIGHTNESS
+    return jsonify(config.DEFAULT_COLOR, config.DEFAULT_BRIGHTNESS)
 
 @app.route('/color/change', methods=['GET','PUT'])
 def changeColor():

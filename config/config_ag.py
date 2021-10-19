@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # raspberry pi name
-PI_HOSTNAME = pascal
+PI_HOSTNAME = "pascal"
 
 # nightmode
 NIGHTMODE_START = 23

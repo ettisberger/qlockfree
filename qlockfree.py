@@ -113,7 +113,7 @@ def getBrightness():
             print("Error!", response.status_code)
             return config.DEFAULT_BRIGHTNESS
         response = response.json()
-        return response[0]
+        return response
     except requests.ConnectionError as error:
         print(error)
         return config.DEFAULT_BRIGHTNESS

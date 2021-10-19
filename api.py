@@ -6,6 +6,7 @@ from flask import request
 from config import config_ag as config
 
 color = config.DEFAULT_COLOR
+brightness = config.DEFAULT_BRIGHTNESS
 
 app = Flask(__name__)
 
@@ -18,6 +19,11 @@ def hello_world():
 def getColor():
     print("API: Get color ", color)
     return jsonify(color)
+
+@app.route('/brightness', methods=['GET'])
+def getBrightness():
+    print("API: Get brightness ", brightness)
+    return jsonify(brightness)
 
 @app.route('/color/change/default', methods=['GET','PUT'])
 def resetDefaultColor():
@@ -43,6 +49,19 @@ def changeColor():
 
     print("API: Change color")
     return jsonify(color)
+
+@app.route('/brightness/change', methods=['GET','PUT'])
+def changeBrightness():
+    global brightness
+
+    if 'brightness' in request.args:
+        print("API: Change brightness from", brightness, " to ", request.args['brightness'])
+        brightness = request.args['brightness']
+    else:
+        brightness = 1.0
+
+    print("API: Change brightness")
+    return jsonify(brightness)
 
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0",port=80)

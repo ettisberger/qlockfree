@@ -165,14 +165,15 @@ while True:
 
     if changeNeeded():
         # resetLED()
+
+        brightness = getBrightness()
+
         if isNightmode(hour):
-            pixels.brightness = config.NIGHTMODE_BRIGHTNESS
-        else:
-            pixels.brightness = brightness
+            brightness = config.NIGHTMODE_BRIGHTNESS
 
         color = getColor()
-        brightness = getBrightness()
         timeArray = getTime(hour, minute)
+        pixels.brightness = brightness
         print("time: ", timeArray)
         print("color: ", color)
         print("brightness: ", brightness)

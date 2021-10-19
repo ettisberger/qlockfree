@@ -56,7 +56,7 @@ def changeBrightness():
 
     if 'brightness' in request.args:
         print("API: Change brightness from", brightness, " to ", request.args['brightness'])
-        brightness = request.args['brightness']
+        brightness = float(request.args['brightness'])
     else:
         brightness = 1.0
 

@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# raspberry pi name
+PI_HOSTNAME = raspberrypi
+
 # nightmode
 NIGHTMODE_START = 23
 NIGHTMODE_END = 6

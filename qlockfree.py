@@ -96,7 +96,7 @@ def getHour(hour, minute):
 
 def getColor():
     try:
-        response = requests.get("http://raspberrypi/color")
+        response = requests.get("http://" + config.PI_HOSTNAME + "/color")
         if (response.status_code != 200):
             print("Error!", response.status_code)
             return config.DEFAULT_COLOR
@@ -105,6 +105,18 @@ def getColor():
     except requests.ConnectionError as error:
         print(error)
         return config.DEFAULT_COLOR
+
+def getBrightness():
+    try:
+        response = requests.get("http://" + config.PI_HOSTNAME + "/brightness")
+        if (response.status_code != 200):
+            print("Error!", response.status_code)
+            return config.DEFAULT_BRIGHTNESS
+        response = response.json()
+        return response[0]
+    except requests.ConnectionError as error:
+        print(error)
+        return config.DEFAULT_BRIGHTNESS
 
 def changeNeeded():
     global lastMinute
@@ -144,6 +156,7 @@ resetLED()
 
 lastMinute = None
 color = config.DEFAULT_COLOR
+brightness = config.DEFAULT_BRIGHTNESS
 
 while True:
     now = datetime.datetime.now()
@@ -155,12 +168,13 @@ while True:
         if isNightmode(hour):
             pixels.brightness = config.NIGHTMODE_BRIGHTNESS
         else:
-            pixels.brightness = config.DEFAULT_BRIGHTNESS
+            pixels.brightness = brightness
 
         color = getColor()
+        brightness = getBrightness()
         timeArray = getTime(hour, minute)
         print("time: ", timeArray)
         print("color: ", color)
-        print("brightness: ", pixels.brightness)
+        print("brightness: ", brightness)
 
         show(timeArray, color)
